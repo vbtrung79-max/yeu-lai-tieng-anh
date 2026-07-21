@@ -30,6 +30,12 @@ let ttsUtterance = null;
 let currentLesson = null;
 let currentSrsCard = null;
 
+// Timer State (Đo lường thời gian tự động)
+let activeStudyTimer = null;
+let lastActivityTime = Date.now();
+let secondsAccumulatedThisSession = 0;
+let minutesAccumulatedThisSession = 0;
+
 // Initialize data from LocalStorage on DOM load
 document.addEventListener("DOMContentLoaded", () => {
     initDatabase();
@@ -191,6 +197,7 @@ function setupNavigation() {
             // Pause reader playing if navigating away
             if (targetId !== "screen-reader") {
                 pausePlayback();
+                stopStudyTimer();
             }
         });
     });
@@ -214,6 +221,10 @@ function navigateToScreen(screenId) {
         renderDashboard();
     } else if (screenId === "screen-srs") {
         renderSrsFlashcards();
+    }
+    
+    if (screenId !== "screen-reader") {
+        stopStudyTimer();
     }
 }
 
@@ -629,6 +640,57 @@ function setupActiveReader() {
     });
 }
 
+function startStudyTimer() {
+    stopStudyTimer(); // Dừng nếu đang có timer chạy
+    
+    lastActivityTime = Date.now();
+    secondsAccumulatedThisSession = 0;
+    minutesAccumulatedThisSession = 0;
+    
+    document.getElementById("reader-timer-text").innerText = "Đang học: 0m";
+    
+    // Đăng ký các sự kiện tương tác của người dùng để tránh idle (treo máy không học)
+    const updateActivity = () => {
+        lastActivityTime = Date.now();
+    };
+    
+    document.addEventListener("mousemove", updateActivity, { passive: true });
+    document.addEventListener("click", updateActivity, { passive: true });
+    document.addEventListener("keypress", updateActivity, { passive: true });
+    document.addEventListener("touchstart", updateActivity, { passive: true });
+    
+    activeStudyTimer = setInterval(() => {
+        // Người dùng được coi là active nếu có tương tác trong vòng 2 phút qua
+        const isUserActive = (Date.now() - lastActivityTime) < 120000;
+        // Hoặc nếu trình phát nhạc đang chạy (người dùng đang nghe thụ động/chủ động)
+        const isAudioPlaying = isPlaying;
+        
+        if (isUserActive || isAudioPlaying) {
+            secondsAccumulatedThisSession++;
+            if (secondsAccumulatedThisSession >= 60) {
+                secondsAccumulatedThisSession = 0;
+                minutesAccumulatedThisSession++;
+                
+                // Lưu thời gian học chủ động (1 phút) vào hệ thống
+                logStudyMinutes(1, 0);
+                
+                // Cập nhật text hiển thị trên badge
+                document.getElementById("reader-timer-text").innerText = `Đang học: ${minutesAccumulatedThisSession}m`;
+                
+                // Cập nhật lại giao diện Dashboard và Streak
+                renderDashboard();
+            }
+        }
+    }, 1000);
+}
+
+function stopStudyTimer() {
+    if (activeStudyTimer) {
+        clearInterval(activeStudyTimer);
+        activeStudyTimer = null;
+    }
+}
+
 function openReader(lesson) {
     currentLesson = lesson;
     
@@ -643,6 +705,9 @@ function openReader(lesson) {
     
     // Navigate screen
     navigateToScreen("screen-reader");
+    
+    // Khởi chạy bộ đếm thời gian học tự động
+    startStudyTimer();
     
     // Render Title & Category
     document.getElementById("reader-lesson-title").innerText = lesson.title;

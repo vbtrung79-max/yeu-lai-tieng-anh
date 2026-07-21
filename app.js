@@ -10,7 +10,7 @@ const DEFAULT_PROFILE = {
     lastActiveDate: "", // Format: YYYY-MM-DD
     dailyGoalMinutes: 30,
     vacationDaysLeft: 3,
-    facebookUrl: "https://facebook.com",
+    facebookUrl: "https://www.facebook.com/groups/3960431260863803/permalink/4463958217177769/",
     facebookToken: "EAAVtkFj3xQ0BRXft0jBrMeyhkBxFyTY0Ln6PW4n1UcIbum40ZCDZCJhLRRayeZClsXrcqZBaWkFDZBY7BRx4NqqnNrmK4OQt7MhQ0JR86iuZADw9obv0LWU4mUsRIZBonYgxdHhrkBlmJ5qQe75uBCw2oOZCsIJVLHH0MW6mMt4ZCfOcjMYq4wARSvJPlXJIVBldcdKNB6qWO",
     facebookPageId: "1021254441061691",
     facebookAutopost: true
@@ -97,10 +97,18 @@ function initDatabase() {
     if (profileRaw) {
         try {
             userProfile = JSON.parse(profileRaw);
+            // DI TRÚ: Nếu link facebook cũ hoặc trống, tự động đổi sang link nhóm mới của anh Trung
+            if (!userProfile.facebookUrl || userProfile.facebookUrl === "https://facebook.com" || userProfile.facebookUrl.includes("facebook.com/groups") === false) {
+                userProfile.facebookUrl = "https://www.facebook.com/groups/3960431260863803/permalink/4463958217177769/";
+                saveProfile();
+            }
         } catch (e) {
             console.error("Error parsing profile, resetting...", e);
             userProfile = { ...DEFAULT_PROFILE };
         }
+    } else {
+        userProfile = { ...DEFAULT_PROFILE };
+        saveProfile();
     }
     
     // 2. Lessons (merge DEFAULT books from books.js with custom lessons)

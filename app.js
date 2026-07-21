@@ -12,7 +12,7 @@ const DEFAULT_PROFILE = {
     vacationDaysLeft: 3,
     facebookUrl: "https://www.facebook.com/groups/3960431260863803/permalink/4463958217177769/",
     facebookToken: "EAAVtkFj3xQ0BRXft0jBrMeyhkBxFyTY0Ln6PW4n1UcIbum40ZCDZCJhLRRayeZClsXrcqZBaWkFDZBY7BRx4NqqnNrmK4OQt7MhQ0JR86iuZADw9obv0LWU4mUsRIZBonYgxdHhrkBlmJ5qQe75uBCw2oOZCsIJVLHH0MW6mMt4ZCfOcjMYq4wARSvJPlXJIVBldcdKNB6qWO",
-    facebookPageId: "1021254441061691",
+    facebookPageId: "4463958217177769",
     facebookAutopost: true
 };
 
@@ -107,7 +107,7 @@ function initDatabase() {
                 userProfile.facebookToken = DEFAULT_PROFILE.facebookToken;
                 needsSave = true;
             }
-            if (!userProfile.facebookPageId) {
+            if (!userProfile.facebookPageId || userProfile.facebookPageId === "1021254441061691") {
                 userProfile.facebookPageId = DEFAULT_PROFILE.facebookPageId;
                 needsSave = true;
             }
@@ -575,7 +575,10 @@ async function checkAndPostFacebookDiary(force = false) {
                     `Quyết tâm rèn luyện ngoại ngữ bền bỉ mỗi ngày! 💪\n` +
                     `#TrungSteelAI #YêuLạiTiếngAnh #KỷLuậtBảnThân #HọcTiếngAnhMỗiNgày`;
                     
-    const url = `https://graph.facebook.com/v21.0/${pageId}/feed`;
+    // Nếu ID là ID bài viết cụ thể (như 4463958217177769), ta đăng dưới dạng bình luận (comments) thay vì bài viết mới (feed)
+    const isComment = pageId === "4463958217177769" || pageId.startsWith("446");
+    const endpoint = isComment ? "comments" : "feed";
+    const url = `https://graph.facebook.com/v21.0/${pageId}/${endpoint}`;
     try {
         const response = await fetch(url, {
             method: 'POST',

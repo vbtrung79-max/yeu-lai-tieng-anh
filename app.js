@@ -275,6 +275,7 @@ function renderDashboard() {
     // 3. Render Lessons Lists
     renderLessonsByCategory("ministory", "ministory-lessons-root");
     renderLessonsByCategory("level1", "level1-lessons-root");
+    renderLessonsByCategory("power", "power-lessons-root");
     renderLessonsByCategory("bookworm", "bookworms-lessons-root");
     renderLessonsByCategory("custom", "custom-lessons-root");
     

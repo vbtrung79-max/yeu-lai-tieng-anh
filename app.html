@@ -363,6 +363,13 @@
                         <!-- Real Audio Player element -->
                         <audio id="main-audio-element" style="display:none;"></audio>
 
+                        <!-- YouTube Player Section (Tự động hiển thị nếu bài học có youtubeId) -->
+                        <div class="glass-card youtube-player-card hidden" id="youtube-player-card" style="padding: 10px; margin-bottom: 0;">
+                            <div class="youtube-player-wrapper" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: var(--radius-sm); border: 1px solid var(--border-card);">
+                                <div id="yt-player" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"></div>
+                            </div>
+                        </div>
+
                         <!-- Stylized Audio Player Bar -->
                         <div class="glass-card custom-player-card">
                             <div class="player-controls-row">

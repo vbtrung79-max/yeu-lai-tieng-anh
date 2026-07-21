@@ -37,6 +37,35 @@ let lastActivityTime = Date.now();
 let secondsAccumulatedThisSession = 0;
 let minutesAccumulatedThisSession = 0;
 
+// YouTube Player API State
+let ytPlayer = null;
+let ytPlayerReady = false;
+
+// Tải thư viện YouTube Iframe API bất tuần tự
+(function() {
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+})();
+
+// Callback khi API YouTube đã tải xong
+window.onYouTubeIframeAPIReady = function() {
+    ytPlayerReady = true;
+};
+
+// Theo dõi trạng thái của Trình phát YouTube để tính thời gian học
+function onYoutubePlayerStateChange(event) {
+    if (event.data === YT.PlayerState.PLAYING) {
+        isPlaying = true;
+        updatePlayIcon();
+        lastActivityTime = Date.now();
+    } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+        isPlaying = false;
+        updatePlayIcon();
+    }
+}
+
 // Initialize data from LocalStorage on DOM load
 document.addEventListener("DOMContentLoaded", () => {
     initDatabase();
@@ -737,6 +766,69 @@ function openReader(lesson) {
     document.getElementById("audio-source-status").style.color = lesson.audioUrl ? "var(--sky)" : "var(--emerald)";
     currentAudioFile = lesson.audioUrl || null;
     
+    // Quản lý Trình phát YouTube tích hợp
+    const ytCard = document.getElementById("youtube-player-card");
+    if (ytCard) {
+        if (lesson.youtubeId) {
+            ytCard.classList.remove("hidden");
+            if (ytPlayerReady) {
+                if (ytPlayer && typeof ytPlayer.cueVideoById === 'function') {
+                    try {
+                        ytPlayer.cueVideoById(lesson.youtubeId);
+                    } catch (e) {
+                        console.error("Lỗi khi cue video: ", e);
+                    }
+                } else {
+                    try {
+                        ytPlayer = new YT.Player('yt-player', {
+                            videoId: lesson.youtubeId,
+                            playerVars: {
+                                'playsinline': 1,
+                                'rel': 0,
+                                'enablejsapi': 1
+                            },
+                            events: {
+                                'onStateChange': onYoutubePlayerStateChange
+                            }
+                        });
+                    } catch (e) {
+                        console.error("Lỗi khi khởi tạo YT Player: ", e);
+                    }
+                }
+            } else {
+                // Nếu API chưa sẵn sàng, chờ 1 giây rồi nạp lại
+                setTimeout(() => {
+                    if (ytPlayerReady && currentLesson && currentLesson.id === lesson.id) {
+                        if (ytPlayer && typeof ytPlayer.cueVideoById === 'function') {
+                            ytPlayer.cueVideoById(lesson.youtubeId);
+                        } else {
+                            ytPlayer = new YT.Player('yt-player', {
+                                videoId: lesson.youtubeId,
+                                playerVars: {
+                                    'playsinline': 1,
+                                    'rel': 0,
+                                    'enablejsapi': 1
+                                },
+                                events: {
+                                    'onStateChange': onYoutubePlayerStateChange
+                                }
+                            });
+                        }
+                    }
+                }, 1000);
+            }
+        } else {
+            ytCard.classList.add("hidden");
+            if (ytPlayer && typeof ytPlayer.stopVideo === 'function') {
+                try {
+                    ytPlayer.stopVideo();
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        }
+    }
+    
     // Tokenize English text to reader
     renderTokenizedText(lesson.content, lesson.dictionary);
     
@@ -923,6 +1015,15 @@ function pausePlayback() {
     window.speechSynthesis.cancel();
     isPlaying = false;
     updatePlayIcon();
+    
+    // Tạm dừng video YouTube nếu có
+    if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
+        try {
+            ytPlayer.pauseVideo();
+        } catch (e) {
+            console.error(e);
+        }
+    }
 }
 
 function updatePlayIcon() {

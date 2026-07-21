@@ -98,8 +98,24 @@ function initDatabase() {
         try {
             userProfile = JSON.parse(profileRaw);
             // DI TRÚ: Nếu link facebook cũ hoặc trống, tự động đổi sang link nhóm mới của anh Trung
+            let needsSave = false;
             if (!userProfile.facebookUrl || userProfile.facebookUrl === "https://facebook.com" || userProfile.facebookUrl.includes("facebook.com/groups") === false) {
                 userProfile.facebookUrl = "https://www.facebook.com/groups/3960431260863803/permalink/4463958217177769/";
+                needsSave = true;
+            }
+            if (!userProfile.facebookToken) {
+                userProfile.facebookToken = DEFAULT_PROFILE.facebookToken;
+                needsSave = true;
+            }
+            if (!userProfile.facebookPageId) {
+                userProfile.facebookPageId = DEFAULT_PROFILE.facebookPageId;
+                needsSave = true;
+            }
+            if (userProfile.facebookAutopost === undefined) {
+                userProfile.facebookAutopost = DEFAULT_PROFILE.facebookAutopost;
+                needsSave = true;
+            }
+            if (needsSave) {
                 saveProfile();
             }
         } catch (e) {

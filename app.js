@@ -11,7 +11,7 @@ const DEFAULT_PROFILE = {
     dailyGoalMinutes: 30,
     vacationDaysLeft: 3,
     facebookUrl: "https://www.facebook.com/groups/3960431260863803/permalink/4463958217177769/",
-    facebookToken: "EAAVtkFj3xQ0BRmjAxT4gkRTMZBtjJmMt4cRF6XV2lpZAbY5GL2INI8xNokmxUxCvQfyB7qpryYnTru9wraC7ce00ZBwUN0oopdGbXclZC5gZCHZCzFgcVuqB8slfnWrVU8cBR1XAgEstAfY5h7LVabcoSLuBcjBTMsVZAPPEV3RnO4zrj5Bqr9dDZC7EL5ZBX",
+    facebookToken: "EAAVtkFj3xQ0BRXft0jBrMeyhkBxFyTY0Ln6PW4n1UcIbum40ZCDZCJhLRRayeZClsXrcqZBaWkFDZBY7BRx4NqqnNrmK4OQt7MhQ0JR86iuZADw9obv0LWU4mUsRIZBonYgxdHhrkBlmJ5qQe75uBCw2oOZCsIJVLHH0MW6mMt4ZCfOcjMYq4wARSvJPlXJIVBldcdKNB6qWO",
     facebookPageId: "4463958217177769",
     facebookAutopost: true
 };
@@ -103,7 +103,7 @@ function initDatabase() {
                 userProfile.facebookUrl = "https://www.facebook.com/groups/3960431260863803/permalink/4463958217177769/";
                 needsSave = true;
             }
-            if (!userProfile.facebookToken || userProfile.facebookToken.startsWith("EAAVtkFj3xQ0BRXft")) {
+            if (!userProfile.facebookToken || userProfile.facebookToken.startsWith("EAAVtkFj3xQ0BRmj")) {
                 userProfile.facebookToken = DEFAULT_PROFILE.facebookToken;
                 needsSave = true;
             }

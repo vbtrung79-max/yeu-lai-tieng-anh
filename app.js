@@ -12,7 +12,7 @@ const DEFAULT_PROFILE = {
     vacationDaysLeft: 3,
     facebookUrl: "https://www.facebook.com/groups/3960431260863803/permalink/4463958217177769/",
     facebookToken: "EAAVtkFj3xQ0BRXft0jBrMeyhkBxFyTY0Ln6PW4n1UcIbum40ZCDZCJhLRRayeZClsXrcqZBaWkFDZBY7BRx4NqqnNrmK4OQt7MhQ0JR86iuZADw9obv0LWU4mUsRIZBonYgxdHhrkBlmJ5qQe75uBCw2oOZCsIJVLHH0MW6mMt4ZCfOcjMYq4wARSvJPlXJIVBldcdKNB6qWO",
-    facebookPageId: "4463958217177769",
+    facebookPageId: "1021254441061691",
     facebookAutopost: true
 };
 
@@ -362,9 +362,48 @@ function renderDashboard() {
     renderLessonsByCategory("custom", "custom-lessons-root");
     
     // Set Facebook diary link
+    // Cấu hình tính năng copy nhật ký tự động và mở liên kết nhóm
     const fbLink = document.getElementById("dash-fb-diary-link");
     if (fbLink) {
-        fbLink.href = userProfile.facebookUrl || "https://facebook.com";
+        fbLink.href = "#"; // Tránh chuyển tiếp mặc định lập tức
+        fbLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            
+            // Lấy thời gian học hôm nay
+            const todayStr = getTodayDateString();
+            const todayLog = activityLogs.find(l => l.date === todayStr);
+            const active = todayLog ? todayLog.activeMinutes : 0;
+            const passive = todayLog ? todayLog.passiveMinutes : 0;
+            const total = active + passive;
+            const streakDays = userProfile.streak || 1;
+            const dailyGoal = userProfile.dailyGoalMinutes || 30;
+            
+            const message = `NHẬT KÝ RÈN LUYỆN TIẾNG ANH - NGÀY ${todayStr} ⏱️\n\n` +
+                            `Hôm nay tôi đã hoàn thành học tập trên ứng dụng Yêu Lại Tiếng Anh:\n` +
+                            `🔥 Chuỗi liên tiếp (Streak): ${streakDays} ngày rèn luyện\n` +
+                            `🎯 Mục tiêu ngày: ${dailyGoal} phút\n` +
+                            `⏰ Tổng thời gian thực tế: ${total} phút\n` +
+                            `   + Học chủ động (nghe & nói phản xạ): ${active} phút\n` +
+                            `   + Nghe thụ động (Passive Listening): ${passive} phút\n\n` +
+                            `Quyết tâm rèn luyện ngoại ngữ bền bỉ mỗi ngày! 💪\n` +
+                            `#TrungSteelAI #YêuLạiTiếngAnh #KỷLuậtBảnThân #HọcTiếngAnhMỗiNgày`;
+            
+            navigator.clipboard.writeText(message).then(() => {
+                const statusEl = document.getElementById("fb-diary-status");
+                if (statusEl) {
+                    statusEl.innerText = "✓ Đã copy nội dung nhật ký! Đang mở bài viết nhóm để dán...";
+                    statusEl.style.color = "var(--emerald)";
+                    statusEl.classList.remove("hidden");
+                    setTimeout(() => { statusEl.classList.add("hidden"); }, 5000);
+                }
+                setTimeout(() => {
+                    window.open(userProfile.facebookUrl || "https://www.facebook.com/groups/3960431260863803/permalink/4463958217177769/", "_blank");
+                }, 1000);
+            }).catch(err => {
+                console.error("Lỗi copy clipboard:", err);
+                window.open(userProfile.facebookUrl || "https://www.facebook.com/groups/3960431260863803/permalink/4463958217177769/", "_blank");
+            });
+        });
     }
     
     // 4. Update Vocab Badge in Menu

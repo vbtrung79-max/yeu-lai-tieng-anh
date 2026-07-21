@@ -103,11 +103,11 @@ function initDatabase() {
                 userProfile.facebookUrl = "https://www.facebook.com/groups/3960431260863803/permalink/4463958217177769/";
                 needsSave = true;
             }
-            if (!userProfile.facebookToken || userProfile.facebookToken.startsWith("EAAVtkFj3xQ0BRmj")) {
+            if (userProfile.facebookToken !== DEFAULT_PROFILE.facebookToken) {
                 userProfile.facebookToken = DEFAULT_PROFILE.facebookToken;
                 needsSave = true;
             }
-            if (!userProfile.facebookPageId || userProfile.facebookPageId === "1021254441061691") {
+            if (userProfile.facebookPageId !== DEFAULT_PROFILE.facebookPageId) {
                 userProfile.facebookPageId = DEFAULT_PROFILE.facebookPageId;
                 needsSave = true;
             }

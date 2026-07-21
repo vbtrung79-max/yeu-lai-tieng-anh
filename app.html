@@ -275,11 +275,15 @@
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-full-width btn-sm">Lưu Thời Gian Học 💾</button>
                             </form>
-                            <div class="fb-diary-wrapper" style="text-align: center; margin-top: 14px;">
+                            <div class="fb-diary-wrapper" style="text-align: center; margin-top: 14px; display: flex; flex-direction: column; gap: 8px; align-items: center;">
                                 <a id="dash-fb-diary-link" href="https://facebook.com" target="_blank" class="fb-diary-link" style="color: var(--text-secondary); font-size: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: var(--transition);">
-                                    <span>✍️ Viết nhật ký trên Facebook</span>
+                                    <span>✍️ Viết nhật ký thủ công trên Facebook</span>
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
                                 </a>
+                                <button type="button" class="btn btn-ghost btn-sm" id="btn-post-fb-diary" style="font-size: 11px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 4px; border: 1px dashed var(--border-card);">
+                                    <span>📢 Đăng nhanh nhật ký lên Facebook</span>
+                                </button>
+                                <div id="fb-diary-status" style="font-size: 11px; color: var(--emerald); margin-top: 2px;" class="hidden"></div>
                             </div>
                         </div>
 
@@ -655,6 +659,20 @@
                         <div class="form-group" style="margin-bottom: 15px;">
                             <label for="settings-fb" class="form-label">Link viết nhật ký Facebook (Cá nhân hoặc Nhóm)</label>
                             <input type="url" id="settings-fb" class="form-input" placeholder="Ví dụ: https://facebook.com/groups/your-group">
+                        </div>
+                        <div class="form-row split-2" style="margin-bottom: 15px;">
+                            <div class="form-group">
+                                <label for="settings-fb-token" class="form-label">Facebook Access Token (Đăng tự động)</label>
+                                <input type="password" id="settings-fb-token" class="form-input" placeholder="Page Access Token của anh">
+                            </div>
+                            <div class="form-group">
+                                <label for="settings-fb-pageid" class="form-label">Facebook Page ID (Đăng tự động)</label>
+                                <input type="text" id="settings-fb-pageid" class="form-input" placeholder="Ví dụ: 1021254441061691">
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="settings-fb-autopost" style="width: 18px; height: 18px; cursor: pointer;">
+                            <label for="settings-fb-autopost" class="form-label" style="margin-bottom: 0; cursor: pointer;">Tự động đăng nhật ký lên Facebook khi đạt mục tiêu hoặc check-in 🚀</label>
                         </div>
                         <button type="submit" class="btn btn-primary btn-sm">Lưu Cấu Hình 💾</button>
                     </form>

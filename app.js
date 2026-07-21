@@ -10,7 +10,10 @@ const DEFAULT_PROFILE = {
     lastActiveDate: "", // Format: YYYY-MM-DD
     dailyGoalMinutes: 30,
     vacationDaysLeft: 3,
-    facebookUrl: "https://facebook.com"
+    facebookUrl: "https://facebook.com",
+    facebookToken: "EAAVtkFj3xQ0BRXft0jBrMeyhkBxFyTY0Ln6PW4n1UcIbum40ZCDZCJhLRRayeZClsXrcqZBaWkFDZBY7BRx4NqqnNrmK4OQt7MhQ0JR86iuZADw9obv0LWU4mUsRIZBonYgxdHhrkBlmJ5qQe75uBCw2oOZCsIJVLHH0MW6mMt4ZCfOcjMYq4wARSvJPlXJIVBldcdKNB6qWO",
+    facebookPageId: "1021254441061691",
+    facebookAutopost: true
 };
 
 // Global variables for App State
@@ -295,6 +298,20 @@ function setupDashboard() {
         alert("Đã lưu nhật ký rèn luyện hôm nay thành công! Cố lên anh nhé.");
         renderDashboard();
     });
+    
+    // Nút đăng nhật ký học tập tự động/nhanh lên Facebook
+    const btnFbPost = document.getElementById("btn-post-fb-diary");
+    if (btnFbPost) {
+        btnFbPost.addEventListener("click", async () => {
+            btnFbPost.disabled = true;
+            btnFbPost.innerHTML = `<span>⏳ Đang kết nối Facebook...</span>`;
+            
+            const success = await checkAndPostFacebookDiary(true);
+            
+            btnFbPost.disabled = false;
+            btnFbPost.innerHTML = `<span>📢 Đăng nhanh nhật ký lên Facebook</span>`;
+        });
+    }
 }
 
 function renderDashboard() {
@@ -460,6 +477,119 @@ function logStudyMinutes(activeMinutes, passiveMinutes) {
     
     // Update streak triggers
     updateStreak();
+    
+    // Tự động kiểm tra và đăng nhật ký lên Facebook nếu bật
+    setTimeout(() => {
+        checkAndPostFacebookDiary(false);
+    }, 2000);
+}
+
+// Biến lưu vết ngày cuối cùng đã đăng tự động thành công để tránh đăng lặp trong cùng ngày
+let lastPostedDate = localStorage.getItem("ylta_last_posted_date") || "";
+
+async function checkAndPostFacebookDiary(force = false) {
+    const todayStr = getTodayDateString();
+    
+    // Tìm tổng thời gian học hôm nay
+    const todayLog = activityLogs.find(l => l.date === todayStr);
+    const active = todayLog ? todayLog.activeMinutes : 0;
+    const passive = todayLog ? todayLog.passiveMinutes : 0;
+    const total = active + passive;
+    
+    const token = userProfile.facebookToken || "";
+    const pageId = userProfile.facebookPageId || "";
+    const isAutoPostEnabled = userProfile.facebookAutopost !== false;
+    const dailyGoal = userProfile.dailyGoalMinutes || 30;
+    
+    const statusEl = document.getElementById("fb-diary-status");
+    function setStatus(msg, isError = false) {
+        if (!statusEl) return;
+        statusEl.innerText = msg;
+        statusEl.style.color = isError ? "var(--red)" : "var(--emerald)";
+        statusEl.classList.remove("hidden");
+        setTimeout(() => {
+            statusEl.classList.add("hidden");
+        }, 8000);
+    }
+    
+    // Nếu không có cấu hình token hoặc pageId
+    if (!token || !pageId) {
+        if (force) {
+            alert("Anh chưa cấu hình Token hoặc Page ID trong mục Cài đặt để đăng tự động ạ!");
+        }
+        return false;
+    }
+    
+    // Nếu là tự động và đã đăng hôm nay rồi thì bỏ qua
+    if (!force && lastPostedDate === todayStr) {
+        return false;
+    }
+    
+    // Nếu tự động, chỉ đăng khi tổng thời gian đạt mục tiêu ngày
+    if (!force) {
+        if (!isAutoPostEnabled) return false;
+        if (total < dailyGoal) return false;
+    }
+    
+    // Nếu thời gian bằng 0
+    if (total === 0) {
+        if (force) {
+            alert("Hôm nay anh chưa học phút nào nên chưa có nhật ký để đăng ạ!");
+        }
+        return false;
+    }
+    
+    // Tạo nội dung nhật ký
+    const streakDays = userProfile.streak || 1;
+    const message = `NHẬT KÝ RÈN LUYỆN TIẾNG ANH - NGÀY ${todayStr} ⏱️\n\n` +
+                    `Hôm nay tôi đã hoàn thành học tập trên ứng dụng Yêu Lại Tiếng Anh:\n` +
+                    `🔥 Chuỗi liên tiếp (Streak): ${streakDays} ngày rèn luyện\n` +
+                    `🎯 Mục tiêu ngày: ${dailyGoal} phút\n` +
+                    `⏰ Tổng thời gian thực tế: ${total} phút\n` +
+                    `   + Học chủ động (nghe & nói phản xạ): ${active} phút\n` +
+                    `   + Nghe thụ động (Passive Listening): ${passive} phút\n\n` +
+                    `Quyết tâm rèn luyện ngoại ngữ bền bỉ mỗi ngày! 💪\n` +
+                    `#TrungSteelAI #YêuLạiTiếngAnh #KỷLuậtBảnThân #HọcTiếngAnhMỗiNgày`;
+                    
+    const url = `https://graph.facebook.com/v21.0/${pageId}/feed`;
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: message,
+                access_token: token
+            })
+        });
+        const result = await response.json();
+        if (result && result.id) {
+            lastPostedDate = todayStr;
+            localStorage.setItem("ylta_last_posted_date", todayStr);
+            
+            setStatus(`✓ Đã tự động đăng nhật ký học tập thành công!`);
+            if (force) {
+                alert("Đã đăng bài nhật ký học tập ngày hôm nay lên Trang Facebook của anh thành công! 🎉");
+            }
+            return true;
+        } else {
+            console.error("Lỗi đăng bài Facebook:", result);
+            const errDetail = result.error?.message || "Lỗi API Facebook";
+            setStatus(`Lỗi: ${errDetail}`, true);
+            if (force) {
+                alert("Lỗi khi đăng bài lên Facebook: " + errDetail);
+            }
+            return false;
+        }
+    } catch (e) {
+        console.error("Lỗi kết nối Facebook API:", e);
+        setStatus("Lỗi kết nối mạng!", true);
+        if (force) {
+            alert("Lỗi kết nối mạng khi liên kết API Facebook!");
+        }
+        return false;
+    }
 }
 
 function updateStreak() {
@@ -1432,10 +1562,16 @@ function setupSettingsAndBackup() {
         const nameVal = document.getElementById("settings-name").value.trim();
         const goalVal = parseInt(document.getElementById("settings-goal").value, 10) || 30;
         const fbVal = document.getElementById("settings-fb").value.trim();
+        const fbTokenVal = document.getElementById("settings-fb-token").value.trim();
+        const fbPageIdVal = document.getElementById("settings-fb-pageid").value.trim();
+        const fbAutopostVal = document.getElementById("settings-fb-autopost").checked;
         
         userProfile.name = nameVal;
         userProfile.dailyGoalMinutes = goalVal;
         userProfile.facebookUrl = fbVal || "https://facebook.com";
+        userProfile.facebookToken = fbTokenVal;
+        userProfile.facebookPageId = fbPageIdVal;
+        userProfile.facebookAutopost = fbAutopostVal;
         saveProfile();
         
         alert("Cấu hình cá nhân đã lưu thành công!");
@@ -1565,6 +1701,9 @@ function renderSettings() {
     document.getElementById("settings-name").value = userProfile.name;
     document.getElementById("settings-goal").value = userProfile.dailyGoalMinutes;
     document.getElementById("settings-fb").value = userProfile.facebookUrl || "";
+    document.getElementById("settings-fb-token").value = userProfile.facebookToken || "";
+    document.getElementById("settings-fb-pageid").value = userProfile.facebookPageId || "";
+    document.getElementById("settings-fb-autopost").checked = !!userProfile.facebookAutopost;
     document.getElementById("settings-vacation-days").innerText = userProfile.vacationDaysLeft;
 }
 

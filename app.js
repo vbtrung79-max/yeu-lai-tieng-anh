@@ -677,18 +677,19 @@ function startStudyTimer() {
         
         if (isUserActive || isAudioPlaying) {
             secondsAccumulatedThisSession++;
+            
+            // Cập nhật text hiển thị cả số giây chạy trực tiếp mỗi giây
+            const timerTextElVal = document.getElementById("reader-timer-text");
+            if (timerTextElVal) {
+                timerTextElVal.innerText = `Đang học: ${minutesAccumulatedThisSession}m ${secondsAccumulatedThisSession}s`;
+            }
+            
             if (secondsAccumulatedThisSession >= 60) {
                 secondsAccumulatedThisSession = 0;
                 minutesAccumulatedThisSession++;
                 
                 // Lưu thời gian học chủ động (1 phút) vào hệ thống
                 logStudyMinutes(1, 0);
-                
-                // Cập nhật text hiển thị trên badge
-                const timerTextElVal = document.getElementById("reader-timer-text");
-                if (timerTextElVal) {
-                    timerTextElVal.innerText = `Đang học: ${minutesAccumulatedThisSession}m`;
-                }
                 
                 // Cập nhật lại giao diện Dashboard và Streak
                 renderDashboard();

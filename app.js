@@ -111,8 +111,8 @@ function initDatabase() {
         }
     }
     
-    // Kiểm tra xem dữ liệu đã có các bài Mini Stories mặc định mới chưa
-    const hasNewDefaults = loadedLessons.some(l => l.id === "default-1" && l.category === "ministory");
+    // Kiểm tra xem dữ liệu đã có các bài Mini Stories mặc định mới chưa (sử dụng lingq-1 làm cờ di trú)
+    const hasNewDefaults = loadedLessons.some(l => l.id === "lingq-1" && l.category === "ministory");
     
     if (!hasNewDefaults) {
         console.log("Cập nhật danh sách truyện mặc định v2...");

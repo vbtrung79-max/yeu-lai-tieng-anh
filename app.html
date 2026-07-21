@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yêu Lại Tiếng Anh v2 — Cổng Học Tập Thụ Đắc Ngôn Ngữ</title>
+    <meta name="description" content="Chinh phục tiếng Anh bằng phương pháp thụ đắc tự nhiên qua truyện đọc tương tác và rèn luyện thói quen mỗi ngày.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- App Stylesheet -->
+    <link rel="stylesheet" href="app.css">
+</head>
+<body class="dark-theme">
+
+    <!-- ======================================================================= -->
+    <!-- 1. SETUP / WELCOME MODAL (For first-time users)                         -->
+    <!-- ======================================================================= -->
+    <div id="modal-welcome" class="modal-overlay hidden">
+        <div class="modal-card glass-card animate-fade-in">
+            <div class="modal-header">
+                <span class="modal-icon">🔥</span>
+                <h2>Chào Mừng Anh Đến Với Yêu Lại Tiếng Anh v2</h2>
+                <p>Ứng dụng học tập theo phương pháp Thụ đắc ngôn ngữ tự nhiên</p>
+            </div>
+            <div class="modal-body">
+                <form id="welcome-form">
+                    <div class="form-group">
+                        <label for="welcome-name" class="form-label">Tên của anh là gì?</label>
+                        <input type="text" id="welcome-name" class="form-input" placeholder="Ví dụ: Anh Trung" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="welcome-goal" class="form-label">Mục tiêu nghe/đọc chủ động mỗi ngày (phút)</label>
+                        <select id="welcome-goal" class="form-input">
+                            <option value="15">15 Phút/ngày (Khởi đầu)</option>
+                            <option value="30" selected>30 Phút/ngày (Tiêu chuẩn vàng)</option>
+                            <option value="45">45 Phút/ngày (Nỗ lực cao)</option>
+                            <option value="60">60 Phút/ngày (Bứt phá)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full-width">
+                        <span>Bắt Đầu Hành Trình Ngay</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- 2. MAIN APP LAYOUT                                                      -->
+    <!-- ======================================================================= -->
+    <div id="app-layout" class="app-layout">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="app-sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-logo">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+                </div>
+                <div class="brand-info">
+                    <h1 class="brand-title">Yêu Lại <span class="gradient-text">Tiếng Anh</span></h1>
+                    <p class="brand-subtitle">Public Edition</p>
+                </div>
+            </div>
+
+            <!-- Profile Widget in Sidebar -->
+            <div class="sidebar-profile-card">
+                <div class="profile-info">
+                    <span class="user-greeting">Chào anh,</span>
+                    <span class="user-name" id="sidebar-user-name">Anh Trung</span>
+                </div>
+                <div class="sidebar-streak-badge" id="sidebar-streak-container">
+                    <span class="streak-icon">🔥</span>
+                    <span class="streak-val" id="sidebar-streak-val">0</span>
+                    <span class="streak-lbl">ngày</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="#" class="menu-item active" data-target="screen-dashboard">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                    <span>Lộ trình học tập</span>
+                </a>
+                <a href="#" class="menu-item" data-target="screen-reader" id="menu-item-reader">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    <span>Phòng đọc & Nghe</span>
+                </a>
+                <a href="#" class="menu-item" data-target="screen-srs">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.886H3.874l4.896 3.56L6.857 18.33 12 14.77l5.143 3.56-1.913-5.885 4.896-3.56h-6.214Z"/></svg>
+                    <span>Ôn từ vựng (SRS)</span>
+                    <span class="badge-count hidden" id="vocab-review-badge">0</span>
+                </a>
+                <a href="#" class="menu-item" data-target="screen-import">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                    <span>Thêm truyện mới</span>
+                </a>
+                <a href="#" class="menu-item" data-target="screen-settings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    <span>Cài đặt & Sao lưu</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <p>© 2026 Yêu Lại Tiếng Anh</p>
+                <p>Phương pháp Krashen & AJ Hoge</p>
+            </div>
+        </aside>
+
+        <!-- MAIN MAIN CONTENT VIEWPORT -->
+        <main class="app-main">
+            
+            <!-- ======================================================================= -->
+            <!-- TAB: SCREEN DASHBOARD                                                  -->
+            <!-- ======================================================================= -->
+            <section id="screen-dashboard" class="app-screen">
+                <!-- Welcome Banner -->
+                <div class="dashboard-banner">
+                    <div class="banner-text">
+                        <h2>Xin chào, <span id="banner-user-name">Anh Trung</span>! 👋</h2>
+                        <p>Hôm nay anh đã hoàn thành mục tiêu rèn luyện chưa? Hãy bắt đầu nghe và đọc truyện nhé.</p>
+                    </div>
+                    <div class="banner-stats">
+                        <div class="banner-stat-box">
+                            <span class="stat-num" id="dash-streak-val">0</span>
+                            <span class="stat-lbl">Streak Hiện Tại 🔥</span>
+                        </div>
+                        <div class="banner-stat-box">
+                            <span class="stat-num" id="dash-longest-streak">0</span>
+                            <span class="stat-lbl">Kỷ Lục Chuỗi 🏆</span>
+                        </div>
+                        <div class="banner-stat-box">
+                            <span class="stat-num" id="dash-vocab-total">0</span>
+                            <span class="stat-lbl">Từ Đã Lưu ⭐</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Heatmap grid contribution -->
+                <div class="glass-card heatmap-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Lưới Rèn Luyện Thói Quen <small>(30 ngày qua)</small></h3>
+                        <div class="heatmap-summary" id="heatmap-summary-text">Học tích lũy: 0 phút</div>
+                    </div>
+                    <div class="heatmap-container">
+                        <div class="heatmap-grid" id="heatmap-grid-root">
+                            <!-- 30 days rendered dynamically -->
+                        </div>
+                        <div class="heatmap-legend">
+                            <span>Ít nghe / Less</span>
+                            <div class="legend-box lvl-0"></div>
+                            <div class="legend-box lvl-1"></div>
+                            <div class="legend-box lvl-2"></div>
+                            <div class="legend-box lvl-3"></div>
+                            <span>Nghe nhiều / More</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-split-layout">
+                    <!-- Curriculum List Column -->
+                    <div class="curriculum-container">
+                        <div class="section-title-wrapper">
+                            <h2 class="section-title">Giáo Trình Của Anh</h2>
+                        </div>
+                        
+                        <!-- Tabs switcher for curriculum -->
+                        <div class="curriculum-tabs">
+                            <button class="tab-btn active" data-tab="tab-ministory">Mini Stories (5 bài mẫu)</button>
+                            <button class="tab-btn" data-tab="tab-level1">Effortless Level 1</button>
+                            <button class="tab-btn" data-tab="tab-bookworms">Oxford Bookworms</button>
+                            <button class="tab-btn" data-tab="tab-custom">Bài Tự Thêm</button>
+                        </div>
+
+                        <!-- Tab Content: Mini Stories -->
+                        <div id="tab-ministory" class="curriculum-tab-content active">
+                            <div class="lessons-list" id="ministory-lessons-root">
+                                <!-- Rendered dynamically by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Tab Content: Effortless Level 1 -->
+                        <div id="tab-level1" class="curriculum-tab-content">
+                            <div class="info-alert">
+                                <span class="alert-icon">💡</span>
+                                <div class="alert-body">
+                                    <h4>Tài Liệu Effortless English Level 1 (8 Bài)</h4>
+                                    <p>Theo bản quyền phương pháp của A.J Hoge, anh Trung hãy sử dụng tính năng <strong>"Thêm truyện mới"</strong> để dán nội dung văn bản và tải lên file MP3 bài học của anh để học trực tiếp trên giao diện này nhé.</p>
+                                </div>
+                            </div>
+                            <div class="lessons-list" id="level1-lessons-root">
+                                <!-- Custom lessons with category "level1" -->
+                            </div>
+                        </div>
+
+                        <!-- Tab Content: Oxford Bookworms -->
+                        <div id="tab-bookworms" class="curriculum-tab-content">
+                            <div class="info-alert emerald">
+                                <span class="alert-icon">📚</span>
+                                <div class="alert-body">
+                                    <h4>Lộ trình Oxford Bookworms (Starter -> Stage 6)</h4>
+                                    <p>Mỗi ngày đọc sách ~30 phút. Đọc hiểu nghĩa 100% -> nghe lại kết hợp nhìn chữ đạt 90% -> chuyển truyện mới. Anh có thể truy cập bảng tính đầy đủ của lớp hoặc tự dán truyện vào để tra cứu nhanh.</p>
+                                    <div class="alert-actions">
+                                        <a href="https://docs.google.com/spreadsheets/d/11UTJLQIuKvhg-BsPZe4dBKd4JqHQHw5T6WqCl8LxkCw" target="_blank" class="btn btn-secondary btn-sm">📊 Mở Bảng Tính Sách Bookworms</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="lessons-list" id="bookworms-lessons-root">
+                                <!-- Custom lessons with category "bookworm" -->
+                            </div>
+                        </div>
+
+                        <!-- Tab Content: Custom -->
+                        <div id="tab-custom" class="curriculum-tab-content">
+                            <div class="lessons-list" id="custom-lessons-root">
+                                <!-- Custom lessons with category "custom" -->
+                                <div class="empty-state">
+                                    <p>Chưa có truyện tự thêm nào. Hãy nhấn Tab "Thêm truyện mới" ở menu bên trái để bổ sung câu chuyện yêu thích của anh.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick widgets Column -->
+                    <div class="widgets-container">
+                        <!-- Direct Checkin Widget -->
+                        <div class="glass-card widget-card">
+                            <h3 class="card-title">Ghi Nhận Phút Học Nhanh</h3>
+                            <p class="card-subtitle">Điền số phút nghe thụ động hôm nay (khi gym, chạy bộ, di chuyển...)</p>
+                            <form id="quick-checkin-form" class="quick-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="checkin-active" class="form-label">Nghe chủ động (phút)</label>
+                                        <input type="number" id="checkin-active" class="form-input" min="0" value="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="checkin-passive" class="form-label">Nghe thụ động (phút)</label>
+                                        <input type="number" id="checkin-passive" class="form-input" min="0" value="0">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-full-width btn-sm">Lưu Thời Gian Học 💾</button>
+                            </form>
+                        </div>
+
+                        <!-- 4 Gold Rules Effortless English -->
+                        <div class="glass-card rules-card">
+                            <h3 class="card-title">4 Nguyên Tắc Vàng</h3>
+                            <ul class="gold-rules-list">
+                                <li>
+                                    <span class="rule-num">1</span>
+                                    <div>
+                                        <strong>Nghe bằng tai - Nói bằng bản năng</strong>
+                                        <p>Để đôi tai làm việc chính, không học vẹt từ ngữ pháp giấy.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="rule-num">2</span>
+                                    <div>
+                                        <strong>Lặp đi lặp lại để thấm sâu (Deep Learning)</strong>
+                                        <p>Nghe 1 bài tối thiểu 10-20 lần/ngày và liên tục trong 7 ngày.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="rule-num">3</span>
+                                    <div>
+                                        <strong>Ngữ pháp qua truyện POV</strong>
+                                        <p>Nghe cùng một câu chuyện được kể ở các thì khác nhau để tự cảm nhận ngữ pháp.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="rule-num">4</span>
+                                    <div>
+                                        <strong>Nghe và phản xạ (Listen & Answer)</strong>
+                                        <p>Tập trả lời nhanh các câu hỏi ngắn của Mini Story thay vì chỉ lặp lại.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======================================================================= -->
+            <!-- TAB: SCREEN READER (Active Reading and Audio Playing)                   -->
+            <!-- ======================================================================= -->
+            <section id="screen-reader" class="app-screen hidden">
+                <div class="reader-header">
+                    <button class="btn-back" id="reader-btn-back">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+                        <span>Quay lại lộ trình</span>
+                    </button>
+                    <div class="reader-title-info">
+                        <span class="reader-category-badge" id="reader-lesson-category">Mini Story</span>
+                        <h2 id="reader-lesson-title">Câu chuyện học tập</h2>
+                    </div>
+                </div>
+
+                <div class="reader-split-layout">
+                    <!-- Left: Reader and Audio Controls -->
+                    <div class="reader-main-container">
+                        <!-- Custom Audio Source Selection -->
+                        <div class="glass-card audio-source-card">
+                            <div class="source-header">
+                                <span class="source-label">🎵 Tệp âm thanh bài học:</span>
+                                <span class="source-status" id="audio-source-status">Trình phát sẵn sàng (TTS)</span>
+                            </div>
+                            <div class="source-buttons">
+                                <label class="btn btn-secondary btn-sm file-input-label">
+                                    <span>Chọn file MP3 từ máy của anh</span>
+                                    <input type="file" id="audio-file-input" accept="audio/*" style="display:none;">
+                                </label>
+                                <span class="source-separator">hoặc</span>
+                                <button class="btn btn-ghost btn-sm" id="btn-use-tts">Dùng Giọng AI Trình duyệt (TTS) 🔊</button>
+                            </div>
+                            <div class="file-name-display hidden" id="mp3-file-name">Chưa nạp file MP3 local</div>
+                        </div>
+
+                        <!-- Real Audio Player element -->
+                        <audio id="main-audio-element" style="display:none;"></audio>
+
+                        <!-- Stylized Audio Player Bar -->
+                        <div class="glass-card custom-player-card">
+                            <div class="player-controls-row">
+                                <button class="player-btn" id="player-btn-play">
+                                    <!-- Play SVG -->
+                                    <svg id="play-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                                    <!-- Pause SVG (hidden initially) -->
+                                    <svg id="pause-icon" class="hidden" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                </button>
+                                
+                                <div class="player-progress-area">
+                                    <span class="player-time" id="player-time-current">00:00</span>
+                                    <input type="range" id="player-seek-slider" class="player-slider" min="0" max="100" value="0">
+                                    <span class="player-time" id="player-time-duration">00:00</span>
+                                </div>
+                                
+                                <div class="player-speed-area">
+                                    <label for="player-speed-select">Tốc độ:</label>
+                                    <select id="player-speed-select" class="speed-select">
+                                        <option value="0.8">0.8x</option>
+                                        <option value="1.0" selected>1.0x</option>
+                                        <option value="1.2">1.2x</option>
+                                        <option value="1.5">1.5x</option>
+                                    </select>
+                                </div>
+
+                                <div class="shadowing-mode-toggle">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="shadow-loop-checkbox">
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <span class="toggle-lbl">Lặp câu 🔁</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Reading Pane -->
+                        <div class="glass-card active-reader-card">
+                            <div class="reader-text-container" id="reader-text-root">
+                                <!-- Interactive span words injected here -->
+                                Chọn một bài học để bắt đầu đọc và tra cứu.
+                            </div>
+                        </div>
+
+                        <!-- Q&A POV panel for Mini Stories -->
+                        <div class="glass-card qa-interactive-card hidden" id="reader-qa-card">
+                            <h3 class="card-title">Luyện Phản Xạ: Hỏi & Đáp (POV / Q&A)</h3>
+                            <p class="card-subtitle">Hãy nghe câu hỏi, trả lời to thành tiếng, sau đó bấm xem đáp án để kiểm tra.</p>
+                            <div class="qa-list" id="reader-qa-list">
+                                <!-- Q&A rows injected here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Study Steps Sidebar -->
+                    <div class="reader-steps-container">
+                        <div class="glass-card steps-card">
+                            <h3 class="card-title">8 Bước Thụ Đắc Phản Xạ</h3>
+                            <p class="card-subtitle">Đánh dấu tích để lưu lại bước học của bài này hôm nay:</p>
+                            <ul class="steps-progress-list" id="steps-checklist-root">
+                                <li data-step="1">
+                                    <label class="step-checkbox-wrapper">
+                                        <input type="checkbox" name="study-step" value="1">
+                                        <span class="step-checkbox-custom"></span>
+                                        <div>
+                                            <strong>Bước 1: Hiểu 100% văn bản</strong>
+                                            <p>Đọc tra cứu hết từ mới, hiểu toàn bộ cốt truyện.</p>
+                                        </div>
+                                    </label>
+                                </li>
+                                <li data-step="2">
+                                    <label class="step-checkbox-wrapper">
+                                        <input type="checkbox" name="study-step" value="2">
+                                        <span class="step-checkbox-custom"></span>
+                                        <div>
+                                            <strong>Bước 2: Nghe + Nhìn văn bản</strong>
+                                            <p>Vừa nghe vừa nhìn chữ để khớp âm thanh với mặt chữ (2-3 lần).</p>
+                                        </div>
+                                    </label>
+                                </li>
+                                <li data-step="3">
+                                    <label class="step-checkbox-wrapper">
+                                        <input type="checkbox" name="study-step" value="3">
+                                        <span class="step-checkbox-custom"></span>
+                                        <div>
+                                            <strong>Bước 3: Chỉ nghe - Không nhìn</strong>
+                                            <p>Nhắm mắt nghe, đảm bảo tai hiểu 100% không cần dịch.</p>
+                                        </div>
+                                    </label>
+                                </li>
+                                <li data-step="4">
+                                    <label class="step-checkbox-wrapper">
+                                        <input type="checkbox" name="study-step" value="4">
+                                        <span class="step-checkbox-custom"></span>
+                                        <div>
+                                            <strong>Bước 4: Trả lời phản xạ từ đơn</strong>
+                                            <p>Nghe câu hỏi Mini Story, trả lời nhanh Yes/No/1 từ.</p>
+                                        </div>
+                                    </label>
+                                </li>
+                                <li data-step="5">
+                                    <label class="step-checkbox-wrapper">
+                                        <input type="checkbox" name="study-step" value="5">
+                                        <span class="step-checkbox-custom"></span>
+                                        <div>
+                                            <strong>Bước 5: Trả lời đầy đủ câu</strong>
+                                            <p>Nói câu dài hơn, phản xạ không cần dịch trong đầu.</p>
+                                        </div>
+                                    </label>
+                                </li>
+                                <li data-step="6">
+                                    <label class="step-checkbox-wrapper">
+                                        <input type="checkbox" name="study-step" value="6">
+                                        <span class="step-checkbox-custom"></span>
+                                        <div>
+                                            <strong>Bước 6: Luyện tốc độ cao (1.25x - 1.5x)</strong>
+                                            <p>Tăng tốc độ phát audio, rèn luyện não bộ phản ứng nhanh.</p>
+                                        </div>
+                                    </label>
+                                </li>
+                                <li data-step="7">
+                                    <label class="step-checkbox-wrapper">
+                                        <input type="checkbox" name="study-step" value="7">
+                                        <span class="step-checkbox-custom"></span>
+                                        <div>
+                                            <strong>Bước 7: Kể lại truyện & Quay video</strong>
+                                            <p>Quay video/ghi âm kể lại truyện và lưu link nộp bài.</p>
+                                        </div>
+                                    </label>
+                                </li>
+                                <li data-step="8">
+                                    <label class="step-checkbox-wrapper">
+                                        <input type="checkbox" name="study-step" value="8">
+                                        <span class="step-checkbox-custom"></span>
+                                        <div>
+                                            <strong>Bước 8: Ôn lại bài cũ & Qua bài mới</strong>
+                                            <p>Sau 7 ngày học sâu, chuyển bài mới và đưa bài cũ vào playlist ôn.</p>
+                                        </div>
+                                    </label>
+                                </li>
+                            </ul>
+
+                            <!-- Step 7 submission URL -->
+                            <div class="step-7-submission hidden" id="step-7-url-box">
+                                <label for="step-7-url" class="form-label">Link nộp bài (Video Drive/Youtube):</label>
+                                <input type="url" id="step-7-url" class="form-input form-input-sm" placeholder="Dán link bài tập của anh tại đây">
+                                <button type="button" class="btn btn-secondary btn-sm" style="margin-top: 5px; width: 100%;" id="btn-save-step7">Lưu link nộp bài 🔗</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======================================================================= -->
+            <!-- TAB: SCREEN SRS FLASHCARDS                                             -->
+            <!-- ======================================================================= -->
+            <section id="screen-srs" class="app-screen hidden">
+                <div class="section-title-wrapper">
+                    <h2 class="section-title">Kho Ôn Tập Từ Vựng (Spaced Repetition System)</h2>
+                </div>
+
+                <!-- Leitner Box stats -->
+                <div class="srs-box-stats-row">
+                    <div class="srs-stat-card glass-card">
+                        <span class="box-num text-sky">Hộp 1</span>
+                        <span class="box-lbl">Học hàng ngày</span>
+                        <span class="box-count" id="srs-count-box1">0</span>
+                    </div>
+                    <div class="srs-stat-card glass-card">
+                        <span class="box-num text-emerald">Hộp 2</span>
+                        <span class="box-lbl">Ôn mỗi 3 ngày</span>
+                        <span class="box-count" id="srs-count-box2">0</span>
+                    </div>
+                    <div class="srs-stat-card glass-card">
+                        <span class="box-num text-orange">Hộp 3</span>
+                        <span class="box-lbl">Ôn mỗi 7 ngày</span>
+                        <span class="box-count" id="srs-count-box3">0</span>
+                    </div>
+                </div>
+
+                <!-- Flashcard Interaction Area -->
+                <div class="flashcard-container">
+                    <div class="flashcard-card-wrapper" id="flashcard-card-element">
+                        <div class="flashcard-face flashcard-front">
+                            <span class="flashcard-word-title" id="flashcard-word">expensive</span>
+                            <div class="flashcard-audio-trigger" id="flashcard-audio-btn">
+                                <span>Phát âm</span> 🔊
+                            </div>
+                            <p class="flashcard-context" id="flashcard-context">Carlos buys a new car. It's a very <span class="hidden-word">____</span> car.</p>
+                            <span class="click-hint">Chạm vào thẻ để lật xem nghĩa 💡</span>
+                        </div>
+                        <div class="flashcard-face flashcard-back">
+                            <span class="flashcard-definition" id="flashcard-definition">Đắt đỏ, tốn kém</span>
+                            <p class="flashcard-translation-title">Nghĩa tiếng Việt</p>
+                            
+                            <div class="active-recall-buttons">
+                                <button class="btn btn-danger" id="srs-btn-forgot">
+                                    <span>Quên (Hộp 1)</span> ❌
+                                </button>
+                                <button class="btn btn-success" id="srs-btn-remember">
+                                    <span>Nhớ (Tăng cấp)</span> ✅
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flashcard-empty-state hidden" id="flashcard-empty-element">
+                        <span class="empty-icon">🎉</span>
+                        <h3>Tuyệt vời! Không còn từ vựng nào cần ôn hôm nay.</h3>
+                        <p>Hãy quay lại phòng đọc để tích lũy thêm từ mới hoặc quay lại vào ngày mai.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======================================================================= -->
+            <!-- TAB: SCREEN IMPORT (Create new custom stories)                         -->
+            <!-- ======================================================================= -->
+            <section id="screen-import" class="app-screen hidden">
+                <div class="section-title-wrapper">
+                    <h2 class="section-title">Nhập Câu Chuyện Mới Của Anh</h2>
+                </div>
+
+                <div class="glass-card form-card">
+                    <form id="import-lesson-form">
+                        <div class="form-row split-2">
+                            <div class="form-group">
+                                <label for="import-title" class="form-label">Tiêu đề truyện/bài viết <span class="required">*</span></label>
+                                <input type="text" id="import-title" class="form-input" placeholder="Ví dụ: A Kiss - Level 1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="import-category" class="form-label">Chuyên mục giáo trình <span class="required">*</span></label>
+                                <select id="import-category" class="form-input" required>
+                                    <option value="ministory">Mini Stories (A.J. Hoge)</option>
+                                    <option value="level1">Effortless English Level 1</option>
+                                    <option value="bookworm">Oxford Bookworms</option>
+                                    <option value="custom" selected>Bài Tự Học Khác</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="import-audio-url" class="form-label">Link Audio online (Tùy chọn)</label>
+                            <input type="url" id="import-audio-url" class="form-input" placeholder="Dán link file MP3 online nếu có. Hoặc anh có thể nạp file MP3 local tại phòng đọc.">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="import-content" class="form-label">Nội dung tiếng Anh của bài học <span class="required">*</span></label>
+                            <textarea id="import-content" class="form-input form-textarea" placeholder="Dán đoạn văn tiếng Anh của câu chuyện hoặc bài đọc tại đây..." required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="import-dictionary" class="form-label">Từ điển tra cứu nhanh (Mỗi dòng một từ, định dạng: `từ: nghĩa` - Tùy chọn)</label>
+                            <textarea id="import-dictionary" class="form-input form-textarea-small" placeholder="Ví dụ:&#10;expensive: đắt đỏ&#10;sidewalk: vỉa hè&#10;ignore: phớt lờ"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Lưu Truyện & Bắt Đầu Học 🚀</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- ======================================================================= -->
+            <!-- TAB: SCREEN SETTINGS (Settings and Import/Export backup)                -->
+            <!-- ======================================================================= -->
+            <section id="screen-settings" class="app-screen hidden">
+                <div class="section-title-wrapper">
+                    <h2 class="section-title">Cài Đặt Hệ Thống & Sao Lưu Dữ Liệu</h2>
+                </div>
+
+                <!-- User profile settings -->
+                <div class="glass-card settings-card">
+                    <h3>Cấu Hình Cá Nhân</h3>
+                    <form id="settings-profile-form" class="settings-form">
+                        <div class="form-row split-2">
+                            <div class="form-group">
+                                <label for="settings-name" class="form-label">Họ và tên của anh</label>
+                                <input type="text" id="settings-name" class="form-input" value="Anh Trung">
+                            </div>
+                            <div class="form-group">
+                                <label for="settings-goal" class="form-label">Mục tiêu học mỗi ngày (phút)</label>
+                                <input type="number" id="settings-goal" class="form-input" min="5" value="30">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm">Lưu Cấu Hình 💾</button>
+                    </form>
+                </div>
+
+                <!-- Vacation days management widget -->
+                <div class="glass-card settings-card">
+                    <h3>Quản Lý Ngày Nghỉ Phép (Vacation Days)</h3>
+                    <p class="card-subtitle">Theo nội quy Notion, anh được phép nghỉ tối đa 3 ngày/tháng để không bị nộp phạt 50K/ngày nếu có việc bận.</p>
+                    <div class="vacation-status-row">
+                        <div class="vacation-days-left">
+                            Số ngày nghỉ phép còn lại tháng này: <strong id="settings-vacation-days">3</strong> ngày
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-sm" id="btn-use-vacation">Xin Nghỉ Học Hôm Nay 🏖️</button>
+                    </div>
+                </div>
+
+                <!-- Backup and Restore (Public releases essentials) -->
+                <div class="glass-card settings-card">
+                    <h3>Sao Lưu Dữ Liệu Học Tập (Backup & Restore)</h3>
+                    <p class="card-subtitle">Ứng dụng hoạt động hoàn toàn offline. Nhấn Xuất Dữ Liệu để tải file sao lưu JSON về máy. Nhập dữ liệu khi anh học trên thiết bị khác để đồng bộ Streak và Từ vựng.</p>
+                    
+                    <div class="backup-actions-row">
+                        <div class="backup-action-box">
+                            <h4>1. Xuất Dữ Liệu</h4>
+                            <p>Tải xuống toàn bộ lịch sử học tập, streak và từ vựng.</p>
+                            <button type="button" class="btn btn-secondary" id="btn-export-data">Xuất file dữ liệu JSON 📥</button>
+                        </div>
+                        
+                        <div class="backup-action-box">
+                            <h4>2. Nhập Dữ Liệu</h4>
+                            <p>Tải lên file JSON để khôi phục tiến trình học tập của anh.</p>
+                            <label class="btn btn-danger file-input-label" style="display: inline-block; width: auto;">
+                                <span>Chọn file khôi phục dữ liệu 📤</span>
+                                <input type="file" id="import-data-file" accept=".json" style="display:none;">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Bong bóng tooltip tra từ (Injected globally in body) -->
+    <div class="global-tooltip hidden" id="reader-tooltip">
+        <div class="tooltip-arrow"></div>
+        <div class="tooltip-body">
+            <span class="tooltip-word" id="tooltip-word-title">word</span>
+            <span class="tooltip-pron" id="tooltip-word-pron" title="Nghe phát âm">🔊</span>
+            <p class="tooltip-def" id="tooltip-word-def">nghĩa tiếng Việt</p>
+            <button class="btn btn-primary btn-xs" id="tooltip-btn-save">Lưu vào SRS ⭐</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="books.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

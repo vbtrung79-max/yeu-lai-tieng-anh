@@ -66,16 +66,26 @@ function initDatabase() {
     
     // 2. Lessons (merge DEFAULT books from books.js with custom lessons)
     const lessonsRaw = localStorage.getItem("ylta_lessons");
+    let loadedLessons = [];
     if (lessonsRaw) {
         try {
-            lessonsList = JSON.parse(lessonsRaw);
+            loadedLessons = JSON.parse(lessonsRaw);
         } catch (e) {
-            console.error("Error parsing lessons list, fallback to defaults...", e);
-            lessonsList = [...BOOKS];
+            loadedLessons = [];
         }
-    } else {
-        lessonsList = [...BOOKS];
+    }
+    
+    // Kiểm tra xem dữ liệu đã có các bài Mini Stories mặc định mới chưa
+    const hasNewDefaults = loadedLessons.some(l => l.id === "default-1" && l.category === "ministory");
+    
+    if (!hasNewDefaults) {
+        console.log("Cập nhật danh sách truyện mặc định v2...");
+        // Giữ lại các truyện tự thêm của người dùng (có ID bắt đầu bằng custom-)
+        const customLessons = loadedLessons.filter(l => l.id && l.id.startsWith("custom-"));
+        lessonsList = [...BOOKS, ...customLessons];
         localStorage.setItem("ylta_lessons", JSON.stringify(lessonsList));
+    } else {
+        lessonsList = loadedLessons;
     }
     
     // 3. Vocab

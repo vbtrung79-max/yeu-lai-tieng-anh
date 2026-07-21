@@ -9,7 +9,8 @@ const DEFAULT_PROFILE = {
     longestStreak: 0,
     lastActiveDate: "", // Format: YYYY-MM-DD
     dailyGoalMinutes: 30,
-    vacationDaysLeft: 3
+    vacationDaysLeft: 3,
+    facebookUrl: "https://facebook.com"
 };
 
 // Global variables for App State
@@ -289,6 +290,12 @@ function renderDashboard() {
     renderLessonsByCategory("power", "power-lessons-root");
     renderLessonsByCategory("bookworm", "bookworms-lessons-root");
     renderLessonsByCategory("custom", "custom-lessons-root");
+    
+    // Set Facebook diary link
+    const fbLink = document.getElementById("dash-fb-diary-link");
+    if (fbLink) {
+        fbLink.href = userProfile.facebookUrl || "https://facebook.com";
+    }
     
     // 4. Update Vocab Badge in Menu
     updateVocabMenuBadge();
@@ -1316,9 +1323,11 @@ function setupSettingsAndBackup() {
         e.preventDefault();
         const nameVal = document.getElementById("settings-name").value.trim();
         const goalVal = parseInt(document.getElementById("settings-goal").value, 10) || 30;
+        const fbVal = document.getElementById("settings-fb").value.trim();
         
         userProfile.name = nameVal;
         userProfile.dailyGoalMinutes = goalVal;
+        userProfile.facebookUrl = fbVal || "https://facebook.com";
         saveProfile();
         
         alert("Cấu hình cá nhân đã lưu thành công!");
@@ -1447,6 +1456,7 @@ function setupSettingsAndBackup() {
 function renderSettings() {
     document.getElementById("settings-name").value = userProfile.name;
     document.getElementById("settings-goal").value = userProfile.dailyGoalMinutes;
+    document.getElementById("settings-fb").value = userProfile.facebookUrl || "";
     document.getElementById("settings-vacation-days").innerText = userProfile.vacationDaysLeft;
 }
 

@@ -790,6 +790,16 @@ body::after {
     font-weight: 700;
     color: var(--emerald);
 }
+.fb-diary-link:hover {
+    color: var(--sky) !important;
+}
+.fb-diary-link svg {
+    transition: transform var(--transition);
+}
+.fb-diary-link:hover svg {
+    transform: translate(1px, -1px);
+    color: var(--sky);
+}
 .btn-back {
     background-color: transparent;
     border: none;

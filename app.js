@@ -654,7 +654,10 @@ function startStudyTimer() {
     secondsAccumulatedThisSession = 0;
     minutesAccumulatedThisSession = 0;
     
-    document.getElementById("reader-timer-text").innerText = "Đang học: 0m";
+    const timerTextEl = document.getElementById("reader-timer-text");
+    if (timerTextEl) {
+        timerTextEl.innerText = "Đang học: 0m";
+    }
     
     // Đăng ký các sự kiện tương tác của người dùng để tránh idle (treo máy không học)
     const updateActivity = () => {
@@ -682,7 +685,10 @@ function startStudyTimer() {
                 logStudyMinutes(1, 0);
                 
                 // Cập nhật text hiển thị trên badge
-                document.getElementById("reader-timer-text").innerText = `Đang học: ${minutesAccumulatedThisSession}m`;
+                const timerTextElVal = document.getElementById("reader-timer-text");
+                if (timerTextElVal) {
+                    timerTextElVal.innerText = `Đang học: ${minutesAccumulatedThisSession}m`;
+                }
                 
                 // Cập nhật lại giao diện Dashboard và Streak
                 renderDashboard();

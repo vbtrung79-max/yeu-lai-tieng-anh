@@ -727,6 +727,16 @@
         </div>
     </div>
 
+    <!-- Trình giám sát lỗi trực tiếp trên giao diện để debug nhanh -->
+    <script>
+        window.addEventListener('error', function(event) {
+            alert("PHÁT HIỆN LỖI CODE: " + event.message + "\nTại: " + event.filename + " (Dòng: " + event.lineno + ")");
+        });
+        window.addEventListener('unhandledrejection', function(event) {
+            alert("PHÁT HIỆN LỖI HỨA HẸN (Promise): " + event.reason);
+        });
+    </script>
+
     <!-- Scripts -->
     <script src="books.js"></script>
     <script src="app.js"></script>

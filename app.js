@@ -1559,16 +1559,23 @@ function setupSettingsAndBackup() {
     const profileForm = document.getElementById("settings-profile-form");
     profileForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        const nameVal = document.getElementById("settings-name").value.trim();
-        const goalVal = parseInt(document.getElementById("settings-goal").value, 10) || 30;
-        const fbVal = document.getElementById("settings-fb").value.trim();
-        const fbTokenVal = document.getElementById("settings-fb-token").value.trim();
-        const fbPageIdVal = document.getElementById("settings-fb-pageid").value.trim();
-        const fbAutopostVal = document.getElementById("settings-fb-autopost").checked;
+        const elName = document.getElementById("settings-name");
+        const elGoal = document.getElementById("settings-goal");
+        const elFb = document.getElementById("settings-fb");
+        const elToken = document.getElementById("settings-fb-token");
+        const elPageId = document.getElementById("settings-fb-pageid");
+        const elAutopost = document.getElementById("settings-fb-autopost");
+        
+        const nameVal = elName ? elName.value.trim() : "Anh Trung";
+        const goalVal = elGoal ? parseInt(elGoal.value, 10) || 30 : 30;
+        const fbVal = elFb ? elFb.value.trim() : "https://facebook.com";
+        const fbTokenVal = elToken ? elToken.value.trim() : "";
+        const fbPageIdVal = elPageId ? elPageId.value.trim() : "";
+        const fbAutopostVal = elAutopost ? elAutopost.checked : true;
         
         userProfile.name = nameVal;
         userProfile.dailyGoalMinutes = goalVal;
-        userProfile.facebookUrl = fbVal || "https://facebook.com";
+        userProfile.facebookUrl = fbVal;
         userProfile.facebookToken = fbTokenVal;
         userProfile.facebookPageId = fbPageIdVal;
         userProfile.facebookAutopost = fbAutopostVal;
@@ -1698,13 +1705,26 @@ function setupSettingsAndBackup() {
 }
 
 function renderSettings() {
-    document.getElementById("settings-name").value = userProfile.name;
-    document.getElementById("settings-goal").value = userProfile.dailyGoalMinutes;
-    document.getElementById("settings-fb").value = userProfile.facebookUrl || "";
-    document.getElementById("settings-fb-token").value = userProfile.facebookToken || "";
-    document.getElementById("settings-fb-pageid").value = userProfile.facebookPageId || "";
-    document.getElementById("settings-fb-autopost").checked = !!userProfile.facebookAutopost;
-    document.getElementById("settings-vacation-days").innerText = userProfile.vacationDaysLeft;
+    const elName = document.getElementById("settings-name");
+    if (elName) elName.value = userProfile.name;
+    
+    const elGoal = document.getElementById("settings-goal");
+    if (elGoal) elGoal.value = userProfile.dailyGoalMinutes;
+    
+    const elFb = document.getElementById("settings-fb");
+    if (elFb) elFb.value = userProfile.facebookUrl || "";
+    
+    const elToken = document.getElementById("settings-fb-token");
+    if (elToken) elToken.value = userProfile.facebookToken || "";
+    
+    const elPageId = document.getElementById("settings-fb-pageid");
+    if (elPageId) elPageId.value = userProfile.facebookPageId || "";
+    
+    const elAutopost = document.getElementById("settings-fb-autopost");
+    if (elAutopost) elAutopost.checked = !!userProfile.facebookAutopost;
+    
+    const elVacation = document.getElementById("settings-vacation-days");
+    if (elVacation) elVacation.innerText = userProfile.vacationDaysLeft;
 }
 
 // ==========================================================================

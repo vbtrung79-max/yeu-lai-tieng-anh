@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- App Stylesheet -->
-    <link rel="stylesheet" href="app.css?v=2.0.8">
+    <link rel="stylesheet" href="app.css?v=3.0.0">
 </head>
 <body class="dark-theme">
 
@@ -169,10 +169,10 @@
                         
                         <!-- Tabs switcher for curriculum -->
                         <div class="curriculum-tabs">
-                            <button class="tab-btn active" data-tab="tab-ministory">Mini Stories (20 bài học)</button>
-                            <button class="tab-btn" data-tab="tab-level1">Effortless Level 1</button>
-                            <button class="tab-btn" data-tab="tab-power">Power English</button>
-                            <button class="tab-btn" data-tab="tab-bookworms">Oxford Bookworms</button>
+                            <button class="tab-btn active" data-tab="tab-ministory">Mini Stories (20 bài)</button>
+                            <button class="tab-btn" data-tab="tab-level1">Effortless Level 1 (2 bài)</button>
+                            <button class="tab-btn" data-tab="tab-power">Power English (2 bài)</button>
+                            <button class="tab-btn" data-tab="tab-bookworms">Oxford Bookworms (5 bài)</button>
                             <button class="tab-btn" data-tab="tab-custom">Bài Tự Thêm</button>
                         </div>
 
@@ -181,12 +181,22 @@
                             <div class="info-alert">
                                 <span class="alert-icon">🎵</span>
                                 <div class="alert-body">
-                                    <h4>Tài liệu Mini Stories Cơ bản (5 bài đầu)</h4>
+                                    <h4>Tài liệu Mini Stories Cơ bản (20 bài)</h4>
                                     <p>Tải trọn bộ file nghe chính thức hoặc nghe playlist online:</p>
                                     <div class="alert-actions" style="margin-top: 8px; display: flex; gap: 8px;">
                                         <a href="https://drive.google.com/drive/folders/11wb0_GS9Hrpa-W4zCFWnxLv69PbQ86Dd" target="_blank" class="btn btn-secondary btn-sm">📥 Tải tài liệu (Drive)</a>
                                         <a href="https://www.youtube.com/playlist?list=PLzdMWtEjIEOIRHp5v7WpntG-Qt3EpfC5n" target="_blank" class="btn btn-secondary btn-sm">🎥 Nghe Online (YouTube)</a>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="glass-card youtube-quick-loader" style="margin-bottom: 20px; padding: 14px 18px; border-left: 4px solid var(--sky);">
+                                <h4 style="margin-bottom: 6px; font-size: 14px; color: var(--sky); display: flex; align-items: center; gap: 6px;">
+                                    <span>🎬 Nạp nhanh Video YouTube để Học & Đếm Giờ tự động</span>
+                                </h4>
+                                <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;">Dán đường dẫn (link) video YouTube bất kỳ vào đây để phát trực tiếp trong App và tự động tích lũy phút học:</p>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <input type="text" class="form-input form-input-sm yt-quick-input" placeholder="Ví dụ: https://www.youtube.com/watch?v=a-VWDb4bA7U" style="flex: 1; min-width: 240px;">
+                                    <button type="button" class="btn btn-primary btn-sm btn-load-yt-quick" data-category="ministory">Học & Đếm Giờ Ngay ⏱️</button>
                                 </div>
                             </div>
                             <div class="lessons-list" id="ministory-lessons-root">
@@ -199,11 +209,21 @@
                             <div class="info-alert">
                                 <span class="alert-icon">💡</span>
                                 <div class="alert-body">
-                                    <h4>Tài Liệu Effortless English Level 1 (8 Bài)</h4>
-                                    <p>Học sau khi hoàn thành 5 bài Mini Stories. Tải tài liệu chính thức về máy:</p>
+                                    <h4>Tài Liệu Effortless English Level 1</h4>
+                                    <p>Học sau khi hoàn thành các bài Mini Stories. Tải tài liệu chính thức về máy:</p>
                                     <div class="alert-actions" style="margin-top: 8px;">
                                         <a href="https://drive.google.com/drive/folders/0BxFxjqD8nHVFfmxBRWswY3h0Z1d4MEZkR1ZPa090bE40a0Jod29rS1hONHk4c3pFeVVnMmc?resourcekey=0-EOF64mS1V88p8Xg7-DXibg" target="_blank" class="btn btn-secondary btn-sm">📥 Tải tài liệu (Drive)</a>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="glass-card youtube-quick-loader" style="margin-bottom: 20px; padding: 14px 18px; border-left: 4px solid var(--sky);">
+                                <h4 style="margin-bottom: 6px; font-size: 14px; color: var(--sky); display: flex; align-items: center; gap: 6px;">
+                                    <span>🎬 Nạp nhanh Video YouTube để Học & Đếm Giờ tự động</span>
+                                </h4>
+                                <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;">Dán đường dẫn (link) video YouTube Effortless Level 1 vào đây để nhúng vào App và đếm giờ học:</p>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <input type="text" class="form-input form-input-sm yt-quick-input" placeholder="Ví dụ: https://www.youtube.com/watch?v=..." style="flex: 1; min-width: 240px;">
+                                    <button type="button" class="btn btn-primary btn-sm btn-load-yt-quick" data-category="level1">Học & Đếm Giờ Ngay ⏱️</button>
                                 </div>
                             </div>
                             <div class="lessons-list" id="level1-lessons-root">
@@ -223,6 +243,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="glass-card youtube-quick-loader" style="margin-bottom: 20px; padding: 14px 18px; border-left: 4px solid var(--sky);">
+                                <h4 style="margin-bottom: 6px; font-size: 14px; color: var(--sky); display: flex; align-items: center; gap: 6px;">
+                                    <span>🎬 Nạp nhanh Video YouTube để Học & Đếm Giờ tự động</span>
+                                </h4>
+                                <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;">Dán đường dẫn (link) video YouTube Power English vào đây để nhúng vào App và đếm giờ học:</p>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <input type="text" class="form-input form-input-sm yt-quick-input" placeholder="Ví dụ: https://www.youtube.com/watch?v=..." style="flex: 1; min-width: 240px;">
+                                    <button type="button" class="btn btn-primary btn-sm btn-load-yt-quick" data-category="power">Học & Đếm Giờ Ngay ⏱️</button>
+                                </div>
+                            </div>
                             <div class="lessons-list" id="power-lessons-root">
                                 <!-- Custom lessons with category "power" -->
                             </div>
@@ -234,10 +264,20 @@
                                 <span class="alert-icon">📚</span>
                                 <div class="alert-body">
                                     <h4>Lộ trình Oxford Bookworms (Starter -> Stage 6)</h4>
-                                    <p>Mỗi ngày đọc sách ~30 phút. Đọc hiểu nghĩa 100% -> nghe lại kết hợp nhìn chữ đạt 90% -> chuyển truyện mới. Anh có thể truy cập bảng tính đầy đủ của lớp hoặc tự dán truyện vào để tra cứu nhanh.</p>
-                                    <div class="alert-actions">
+                                    <p>Mỗi ngày đọc sách ~30 phút. Đọc hiểu nghĩa 100% -> nghe lại kết hợp nhìn chữ đạt 90% -> chuyển truyện mới. Anh có thể chọn bài học bên dưới hoặc dán bất kỳ link video YouTube Bookworms nào vào để nhúng học trực tiếp trong App!</p>
+                                    <div class="alert-actions" style="margin-top: 8px;">
                                         <a href="https://docs.google.com/spreadsheets/d/11UTJLQIuKvhg-BsPZe4dBKd4JqHQHw5T6WqCl8LxkCw" target="_blank" class="btn btn-secondary btn-sm">📊 Mở Bảng Tính Sách Bookworms</a>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="glass-card youtube-quick-loader" style="margin-bottom: 20px; padding: 14px 18px; border-left: 4px solid var(--sky);">
+                                <h4 style="margin-bottom: 6px; font-size: 14px; color: var(--sky); display: flex; align-items: center; gap: 6px;">
+                                    <span>🎬 Nạp nhanh Video YouTube Oxford Bookworms để Học & Đếm Giờ</span>
+                                </h4>
+                                <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;">Dán link video YouTube Bookworms bất kỳ (ví dụ New Yorkers, Sherlock Holmes...) để phát trực tiếp trong App và tính giờ học tự động:</p>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <input type="text" class="form-input form-input-sm yt-quick-input" placeholder="Dán link YouTube tại đây (Ví dụ: https://www.youtube.com/watch?v=...)" style="flex: 1; min-width: 240px;">
+                                    <button type="button" class="btn btn-primary btn-sm btn-load-yt-quick" data-category="bookworm">Học & Đếm Giờ Ngay ⏱️</button>
                                 </div>
                             </div>
                             <div class="lessons-list" id="bookworms-lessons-root">
@@ -738,7 +778,7 @@
     </script>
 
     <!-- Scripts -->
-    <script src="books.js?v=2.0.8"></script>
-    <script src="app.js?v=2.0.8"></script>
+    <script src="books.js?v=3.0.0"></script>
+    <script src="app.js?v=3.0.0"></script>
 </body>
 </html>

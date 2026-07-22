@@ -138,14 +138,14 @@ function initDatabase() {
         }
     }
     
-    // Kiểm tra xem dữ liệu đã có các bài Mini Stories mặc định mới chưa (sử dụng lingq-1 làm cờ di trú)
-    const hasNewDefaults = loadedLessons.some(l => l.id === "lingq-1" && l.category === "ministory");
+    // Kiểm tra xem dữ liệu đã có đầy đủ các bài Oxford Bookworms & Level 1 chưa (sử dụng bw-1 làm cờ di trú v3)
+    const hasNewDefaults = loadedLessons.some(l => l.id === "bw-1" && l.category === "bookworm");
     
     if (!hasNewDefaults) {
-        console.log("Cập nhật danh sách truyện mặc định v2...");
-        // Giữ lại các truyện tự thêm của người dùng (có ID bắt đầu bằng custom-)
-        const customLessons = loadedLessons.filter(l => l.id && l.id.startsWith("custom-"));
-        lessonsList = [...BOOKS, ...customLessons];
+        console.log("Cập nhật danh sách truyện mặc định v3 (Bổ sung Oxford Bookworms, Level 1 & Power English)...");
+        const bookIds = new Set(BOOKS.map(b => b.id));
+        const customOrUserLessons = loadedLessons.filter(l => !bookIds.has(l.id));
+        lessonsList = [...BOOKS, ...customOrUserLessons];
         localStorage.setItem("ylta_lessons", JSON.stringify(lessonsList));
     } else {
         lessonsList = loadedLessons;
@@ -336,6 +336,67 @@ function setupDashboard() {
             btnFbPost.innerHTML = `<span>📢 Đăng nhanh nhật ký lên Facebook</span>`;
         });
     }
+    
+    // Nút nạp nhanh video YouTube bất kỳ để học & đếm giờ
+    setupQuickYoutubeLoaders();
+}
+
+function setupQuickYoutubeLoaders() {
+    const quickLoadBtns = document.querySelectorAll(".btn-load-yt-quick");
+    quickLoadBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const container = btn.closest(".youtube-quick-loader");
+            const input = container.querySelector(".yt-quick-input");
+            const rawUrl = input ? input.value.trim() : "";
+            
+            if (!rawUrl) {
+                alert("Vui lòng dán đường dẫn (Link) Video YouTube vào ô trống ạ!");
+                return;
+            }
+            
+            const ytId = extractYoutubeId(rawUrl);
+            if (!ytId) {
+                alert("Không nhận diện được ID Video YouTube. Anh vui lòng kiểm tra lại đường dẫn link nhé!");
+                return;
+            }
+            
+            const category = btn.getAttribute("data-category") || "bookworm";
+            
+            // Tạo bài học YouTube nhanh
+            const quickLesson = {
+                id: "yt-quick-" + Date.now(),
+                day: 1,
+                title: "Video YouTube: " + ytId,
+                category: category,
+                audioUrl: "",
+                youtubeId: ytId,
+                content: `Video YouTube trực tuyến (ID: ${ytId}).\n\nHãy tập trung nghe, theo dõi video và rèn luyện phản xạ. Bộ đếm thời gian học của Yêu Lại Tiếng Anh đang chạy tự động đếm giờ cho anh!`,
+                dictionary: {},
+                questions: []
+            };
+            
+            // Thêm bài học mới vào danh sách
+            lessonsList.unshift(quickLesson);
+            saveLessons();
+            
+            if (input) input.value = "";
+            renderDashboard();
+            openReader(quickLesson);
+        });
+    });
+}
+
+function extractYoutubeId(url) {
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    if (match && match[2].length === 11) {
+        return match[2];
+    }
+    if (url.length === 11 && !url.includes("/") && !url.includes(".")) {
+        return url;
+    }
+    return null;
 }
 
 function renderDashboard() {

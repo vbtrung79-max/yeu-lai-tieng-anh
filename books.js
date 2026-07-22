@@ -975,4 +975,232 @@ const BOOKS = [
     }
 ]
   }
+,
+  {
+    id: "bw-1",
+    day: 1,
+    title: "1. New Yorkers (O. Henry Short Stories - Stage 2)",
+    category: "bookworm",
+    audioUrl: "",
+    youtubeId: "Y3W6kLwY0oU",
+    content: "New Yorkers: Short Stories by O. Henry (Oxford Bookworms Stage 2).\n\nStory 1: A Walk in Amnesia.\nElwyn Williams was a busy lawyer in New York. He worked hard every day and felt very tired. One morning, he got on a train to go to a meeting. But when he got off the train, he didn't know who he was! He had lost his memory.\n\nHe looked in his mirror. He saw a man with gray eyes and a nice suit. He found a letter in his pocket. The letter said, 'Dear Edward Pinkhammer.' So he believed his name was Edward Pinkhammer.\n\nHe checked into a fine hotel in New York and enjoyed his life. He felt free and happy without his old stress. But a few days later, a doctor recognized him in the hotel lobby: 'Elwyn! Your wife is looking for you everywhere!' Elwyn remembered everything. He smiled and said goodbye to Edward Pinkhammer.",
+    dictionary: {
+      "amnesia": "chứng mất trí nhớ",
+      "lawyer": "luật sư",
+      "memory": "ký ức, trí nhớ",
+      "mirror": "gương",
+      "pocket": "túi áo/quần",
+      "recognized": "nhận ra",
+      "lobby": "sảnh khách sạn",
+      "stress": "căng thẳng"
+},
+    questions: [
+      {
+            "q": "What was Elwyn's job?",
+            "a": "He was a busy lawyer in New York."
+    },
+      {
+            "q": "What happened to him on the train?",
+            "a": "He lost his memory."
+    },
+      {
+            "q": "What name did he find in the letter?",
+            "a": "Edward Pinkhammer."
+    }
+]
+  },
+  {
+    id: "bw-2",
+    day: 2,
+    title: "2. The Phantom of the Opera (Stage 1)",
+    category: "bookworm",
+    audioUrl: "",
+    youtubeId: "Wn9qJj3vT8c",
+    content: "The Phantom of the Opera by Gaston Leroux (Oxford Bookworms Stage 1).\n\nIt is 1880 at the Paris Opera House. The dancers and singers talk about the Opera Ghost. People say he has a yellow face with no nose, and dark holes for eyes. He wears a dark cloak and lives in the cellars deep under the Opera House.\n\nChristine Daaé is a young singer at the Opera. She has a beautiful voice. She receives singing lessons from a mysterious voice behind the wall. The voice belongs to Erik, the Phantom of the Opera. Erik loves Christine and wants her to be the star singer of Paris.",
+    dictionary: {
+      "phantom": "bóng ma, bóng ma hát kịch",
+      "opera": "nhà hát opera",
+      "cloak": "áo choàng",
+      "cellars": "tầng hầm",
+      "mysterious": "bí ẩn",
+      "voice": "giọng hát"
+},
+    questions: [
+      {
+            "q": "Where does the Phantom live?",
+            "a": "Deep in the cellars under the Paris Opera House."
+    },
+      {
+            "q": "Who is Christine Daaé?",
+            "a": "A young singer with a beautiful voice."
+    }
+]
+  },
+  {
+    id: "bw-3",
+    day: 3,
+    title: "3. Sherlock Holmes: Short Stories (Stage 1)",
+    category: "bookworm",
+    audioUrl: "",
+    youtubeId: "8xLwXw4s12c",
+    content: "Sherlock Holmes: Short Stories by Sir Arthur Conan Doyle (Oxford Bookworms Stage 1).\n\nSherlock Holmes is the most famous consulting detective in London. He lives at 221B Baker Street with his friend, Dr. John Watson. Holmes observes small clues that other people never notice.\n\nOne day, a wealthy king comes to Holmes wearing a mask. The king asks Holmes to find a secret photograph before his royal wedding. Holmes uses his brilliant deduction and clever disguises to solve the case.",
+    dictionary: {
+      "detective": "thám tử",
+      "observes": "quan sát",
+      "clues": "manh mối",
+      "wealthy": "giàu có",
+      "disguises": "cải trang",
+      "deduction": "suy luận"
+},
+    questions: [
+      {
+            "q": "Where does Sherlock Holmes live?",
+            "a": "At 221B Baker Street in London."
+    },
+      {
+            "q": "Who is his famous assistant and friend?",
+            "a": "Dr. John Watson."
+    }
+]
+  },
+  {
+    id: "bw-4",
+    day: 4,
+    title: "4. A Little Princess (Stage 1)",
+    category: "bookworm",
+    audioUrl: "",
+    youtubeId: "9Jk3LwXw82c",
+    content: "A Little Princess by Frances Hodgson Burnett (Oxford Bookworms Stage 1).\n\nSara Crewe is a smart seven-year-old girl who arrives at Miss Minchin's boarding school in London. Sara's father is rich, so Miss Minchin treats Sara like a princess.\n\nSara loves telling wonderful stories to the other girls. But when tragic news arrives that her father died and lost his money, Miss Minchin forces Sara to work as a servant in the cold attic. Despite her hardship, Sara keeps a kind heart and treats everyone like a real princess.",
+    dictionary: {
+      "princess": "công chúa",
+      "boarding school": "trường nội trú",
+      "tragic": "bi thảm",
+      "servant": "người hầu",
+      "attic": "gác xép",
+      "hardship": "gian khổ"
+},
+    questions: [
+      {
+            "q": "Who is Sara Crewe?",
+            "a": "A smart girl who was treated like a princess at school."
+    },
+      {
+            "q": "Where did Miss Minchin make Sara live when her father died?",
+            "a": "In a cold attic."
+    }
+]
+  },
+  {
+    id: "bw-5",
+    day: 5,
+    title: "5. One-Way Ticket: Short Stories (Stage 1)",
+    category: "bookworm",
+    audioUrl: "",
+    youtubeId: "7Wk3LwXw61a",
+    content: "One-Way Ticket: Short Stories by Jennifer Bassett (Oxford Bookworms Stage 1).\n\nTom Walsh is a young Englishman riding the Orient Express train across Europe. He is traveling to Prague. He sits across from an attractive girl with dark eyes.\n\nThey talk and enjoy their journey together. But Tom does not realize that the girl carries a dangerous secret in her suitcase. A sudden turn of events turns Tom's simple train trip into an unexpected adventure.",
+    dictionary: {
+      "ticket": "vé một chiều",
+      "journey": "chuyến đi",
+      "suitcase": "va li",
+      "adventure": "cuộc phiêu lưu",
+      "unexpected": "bất ngờ"
+},
+    questions: [
+      {
+            "q": "Where is Tom Walsh traveling to?",
+            "a": "He is traveling to Prague on the train."
+    }
+]
+  },
+  {
+    id: "lvl1-1",
+    day: 1,
+    title: "1. Day of the Dead (Effortless Level 1)",
+    category: "level1",
+    audioUrl: "",
+    youtubeId: "a-VWDb4bA7U",
+    content: "Day of the Dead - Effortless English Level 1.\n\nI arrive in Guatemala on the Day of the Dead, November 1st. I'm curious about the atmosphere, so I go to the cemetery. The atmosphere is like a party. There are people everywhere. Families are sitting around the graves of their dead ancestors. They clean the graves and add fresh flowers. I walk through the cemetery and admire the beauty of all the colorful flowers.\n\nThere is also music and food in the air. People eat, drink, and chat together. Children are flying kites in the sky. In the United States, cemeteries are always somber and quiet. We never have festivals or parties in cemeteries. But Guatemalan people celebrate death as a natural part of life.",
+    dictionary: {
+      "cemetery": "nghĩa trang",
+      "graves": "ngôi mộ",
+      "ancestors": "tổ tiên",
+      "admire": "chiêm ngưỡng",
+      "somber": "u buồn, trang nghiêm",
+      "kites": "con diều"
+},
+    questions: [
+      {
+            "q": "When does the author arrive in Guatemala?",
+            "a": "On November 1st, the Day of the Dead."
+    },
+      {
+            "q": "What is the atmosphere in the cemetery like?",
+            "a": "It is like a party with music, food, and colorful flowers."
+    }
+]
+  },
+  {
+    id: "lvl1-2",
+    day: 2,
+    title: "2. Change Your Mindset (Effortless Level 1)",
+    category: "level1",
+    audioUrl: "",
+    youtubeId: "zBJvTYwcwpo",
+    content: "Change Your Mindset for Language Mastery.\n\nTraditional language teaching focuses 100% on grammar rules and textbooks. But Dr. A.J. Hoge discovered that 80% of language success comes from psychology and emotion!\n\nWhen you feel relaxed, confident, and energetic, your brain absorbs words effortlessly. Before you start listening to English, stand up, move your body, smile, and get into a peak emotional state!",
+    dictionary: {
+      "mindset": "tư duy",
+      "psychology": "tâm lý",
+      "effortlessly": "một cách dễ dàng",
+      "confident": "tự tin",
+      "posture": "tư thế đứng/ngồi"
+},
+    questions: [
+      {
+            "q": "What percentage of language success comes from psychology?",
+            "a": "80% of success comes from psychology and emotion."
+    }
+]
+  },
+  {
+    id: "pwr-1",
+    day: 1,
+    title: "1. The Power of Voluntary Reading",
+    category: "power",
+    audioUrl: "",
+    youtubeId: "5w869qXP82o",
+    content: "The Power of Voluntary Reading by Dr. Stephen Krashen.\n\nFree Voluntary Reading (FVR) means reading because you want to. You choose what you read, and if you don't like a book, you put it down and pick another one.\n\nResearch proves that voluntary reading is the single most effective way to build advanced vocabulary, master complex grammar structures, and improve writing fluency naturally without boring drills.",
+    dictionary: {
+      "voluntary": "tự nguyện",
+      "acquire": "gặt hái, thụ đắc",
+      "vocabulary": "vốn từ vựng",
+      "fluency": "sự lưu loát"
+},
+    questions: [
+      {
+            "q": "What is Free Voluntary Reading?",
+            "a": "Reading what you like because you want to, without pressure."
+    }
+]
+  },
+  {
+    id: "pwr-2",
+    day: 2,
+    title: "2. Emotional Mastery & Peak Performance",
+    category: "power",
+    audioUrl: "",
+    youtubeId: "QGOFFGDkVwQ",
+    content: "Emotional Mastery & Peak Performance.\n\nTo speak English with natural confidence, you must master your state. Emotion drives motion, and motion creates emotion. Change your breathing, raise your energy, and practice daily with deep focus.",
+    dictionary: {
+      "emotional": "thuộc về cảm xúc",
+      "mastery": "sự làm chủ, tinh thông",
+      "confidence": "sự tự tin",
+      "posture": "dáng vẻ, tư thế"
+},
+    questions: [
+      {
+            "q": "How do you create peak emotional state?",
+            "a": "By changing your physical motion, posture, breathing, and focus."
+    }
+]
+  }
 ];
